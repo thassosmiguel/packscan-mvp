@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PackScan - MVP</title>
+    <title>PackScan Pro - MVP</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>PackScan 📦</h1>
-        <p>Simulação 3D e Orçamento de Embalagens</p>
+        <h1>PackScan Pro 📦</h1>
+        
+        <div class="camera-preview">
+            <video id="webcam" autoplay playsinline></video>
+            <div class="scan-line"></div>
+        </div>
 
         <div class="input-group">
-            <input type="number" id="largura" placeholder="Largura (cm)">
-            <input type="number" id="altura" placeholder="Altura (cm)">
-            <input type="number" id="profundidade" placeholder="Profundidade (cm)">
+            <input type="number" id="largura" placeholder="Largura (cm)" value="20">
+            <input type="number" id="altura" placeholder="Altura (cm)" value="15">
+            <input type="number" id="profundidade" placeholder="Profundidade (cm)" value="10">
             
             <select id="material">
                 <option value="papelão">Papelão</option>
@@ -23,7 +27,10 @@
                 <option value="premium">Premium</option>
             </select>
 
-            <button onclick="calcularOrcamento()">Calcular e Gerar 3D</button>
+            <label>Aplicar Logo na Caixa:</label>
+            <input type="file" id="logoInput" accept="image/*">
+
+            <button onclick="calcularEGerar()">Simular e Calcular</button>
         </div>
 
         <div id="resultado"></div>
