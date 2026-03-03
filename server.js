@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 app.use(express.json());
+// Serve os arquivos da pasta public como raiz
 app.use(express.static('public'));
 
 app.post('/orcamento', (req, res) => {
@@ -12,7 +14,7 @@ app.post('/orcamento', (req, res) => {
     }
 
     const volume = largura * altura * profundidade;
-    const volumeFinal = volume * 1.1;
+    const volumeFinal = volume * 1.1; // Margem de segurança de 10%
 
     let precoPorCm3;
 
@@ -40,7 +42,7 @@ app.post('/orcamento', (req, res) => {
     });
 });
 
-// AJUSTE AQUI: O Render define a porta automaticamente através de process.env.PORT
+// O Render usa a variável de ambiente PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
