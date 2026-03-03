@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PackScan - Scanner & Orçamento</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; margin-bottom: 20px; }
+        
+        /* Estilos do Formulário */
+        .form-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+        .label-arquivo { font-size: 14px; color: #555; margin-bottom: 5px; display: block; font-weight: bold; }
+        
+        /* Botões */
+        button { width: 100%; padding: 12px; background: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; transition: 0.2s;}
+        button:hover { background: #4338ca; }
+        #btnAbrirScanner { background: #10b981; }
+        #btnAbrirScanner:hover { background: #059669; }
+        #btnCapturar { background: #ef4444; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; z-index: 10;}
+        #btnCapturar:hover { background: #dc2626; }
+
+        #resultado { background: #f1f5f9; padding: 10px; border-radius: 6px; font-size: 14px; margin-bottom: 10px; display: none; }
+        #canvas-container { width: 100%; height: 250px; border-radius: 6px; background: #e2e8f0; overflow: hidden; display: none; cursor: grab; }
+        #canvas-container:active { cursor: grabbing; }
+
+        /* Estilos do Scanner (Câmera) */
+        #scanner-container { display: none; position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 15px; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .mira { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 2px dashed #10b981; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); pointer-events: none;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>📦 PackScan</h2>
+
+    <div id="scanner-container">
+        <video id="camera" autoplay playsinline></video>
+        <div class="mira"></div>
+        <button id="btnCapturar">📸 Escanear Objeto</button>
+    </div>
+
+    <button id="btnAbrirScanner">📷 Abrir Câmera para Medir</button>
+    
+    <div class="form-group">
+        <input id="largura" type="number" placeholder="Larg. (cm)">
+        <input id="altura" type="number" placeholder="Alt. (cm)">
+        <input id="profundidade" type="number" placeholder="Prof. (cm)">
+    </div>
+    
+    <select id="material">
+        <option value="papelão">Papelão (Pardo)</option>
+        <option value="kraft">Kraft (Escuro)</option>
+        <option value="premium">Premium (Branco)</option>
+    </select>
+    
+    <input id="quantidade" type="number" placeholder="Quantidade" value="1">
+    
+    <label class="label-arquivo">Personalizar com Logo:</label>
+    <input id="logoUpload" type="file" accept="image/*" style="margin-bottom: 15px;">
+    
+    <button id="btnCalcular">Gerar Caixa e Orçamento</button>
+    
+    <div id="resultado"></div>
+    <div id="canvas-container"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
