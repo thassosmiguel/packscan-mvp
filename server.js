@@ -40,6 +40,8 @@ app.post('/orcamento', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+// AJUSTE AQUI: O Render define a porta automaticamente através de process.env.PORT
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
