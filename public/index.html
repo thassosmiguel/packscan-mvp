@@ -21,7 +21,11 @@
                         <button onclick="iniciarScan()">Ativar Scanner</button>
                     </div>
                 </div>
-                <button id="btn-parar" onclick="pararScan()" class="btn-stop" style="display: none;">Encerrar Scanner</button>
+
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button id="btn-virar" onclick="virarCamera()" class="btn-flip" style="display: none; flex: 1;">Girar Câmera</button>
+                    <button id="btn-parar" onclick="pararScan()" class="btn-stop" style="display: none; flex: 1; margin-top:0;">Encerrar</button>
+                </div>
 
                 <div class="input-group">
                     <div class="dimensions">
@@ -34,10 +38,8 @@
                         <option value="kraft">Papel Kraft</option>
                         <option value="premium">Premium Branco</option>
                     </select>
-                    
-                    <label>Logo da Marca (Opcional):</label>
+                    <label>Logo (Opcional):</label>
                     <input type="file" id="logoInput" accept="image/*">
-                    
                     <button class="btn-main" onclick="calcularEGerar()">Simular Orçamento</button>
                 </div>
             </div>

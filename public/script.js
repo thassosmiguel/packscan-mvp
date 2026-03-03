@@ -1,24 +1,42 @@
 let scene, camera, renderer, box, controls, streamGlobal;
+let isFrontCamera = false; // Começa sempre com a câmera traseira do celular, ou a frontal padrão do PC.
 
-// 1. GATILHO DA CÂMERA
 async function iniciarScan() {
     const video = document.getElementById('webcam');
     const line = document.getElementById('scan-line');
     const overlay = document.getElementById('camera-overlay');
     const btnStop = document.getElementById('btn-parar');
+    const btnVirar = document.getElementById('btn-virar');
+
+    // Desliga a câmera atual para carregar a nova configuração sem problemas de lentidão
+    if (streamGlobal) {
+        streamGlobal.getTracks().forEach(track => track.stop());
+    }
+
+    const facingMode = isFrontCamera ? "user" : "environment"; // Define se será frontal ou traseira
 
     try {
-        streamGlobal = await navigator.mediaDevices.getUserMedia({ video: true });
+        streamGlobal = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: facingMode } 
+        });
+        
         video.srcObject = streamGlobal;
         line.style.display = 'block';
         overlay.style.display = 'none';
         btnStop.style.display = 'block';
+        btnVirar.style.display = 'block'; // Ativa o botão de virar
+
     } catch (err) {
-        alert("Erro ao acessar câmera.");
+        alert("Erro ao acessar câmera. Verifique as permissões de vídeo.");
     }
 }
 
-// 2. PARAR CÂMERA
+// Virar a Câmera e reiniciar a função de scan com os novos parâmetros (frente e verso)
+function virarCamera() {
+    isFrontCamera = !isFrontCamera;
+    iniciarScan();
+}
+
 function pararScan() {
     if (streamGlobal) {
         streamGlobal.getTracks().forEach(track => track.stop());
@@ -26,10 +44,10 @@ function pararScan() {
         document.getElementById('scan-line').style.display = 'none';
         document.getElementById('camera-overlay').style.display = 'flex';
         document.getElementById('btn-parar').style.display = 'none';
+        document.getElementById('btn-virar').style.display = 'none';
     }
 }
 
-// 3. FUNÇÃO 3D (COM AJUSTE DE CONTAINER)
 function init3D(l, a, p, logoUrl) {
     const container = document.getElementById('canvas-3d');
     container.innerHTML = '';
@@ -37,7 +55,6 @@ function init3D(l, a, p, logoUrl) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf1f5f9);
 
-    // Usa explicitamente a altura e largura do CSS
     const width = container.clientWidth;
     const height = container.clientHeight;
 
@@ -71,7 +88,6 @@ function init3D(l, a, p, logoUrl) {
     animate();
 }
 
-// 4. LÓGICA DE NEGÓCIO
 async function calcularEGerar() {
     const file = document.getElementById('logoInput').files[0];
     const logoUrl = file ? URL.createObjectURL(file) : null;
@@ -83,24 +99,33 @@ async function calcularEGerar() {
         material: document.getElementById('material').value
     };
 
-    const response = await fetch('/orcamento', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados)
-    });
+    try {
+        const response = await fetch('/orcamento', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        });
 
-    const res = await response.json();
-    document.getElementById('resultado').innerHTML = `
-        <div style="background:#e0e7ff; padding:15px; border-radius:12px; margin-bottom:15px;">
-            <strong>Preço Estimado: ${res.precoEstimado}</strong><br>
-            <small>Volume: ${res.volumeCalculado}</small>
-        </div>
-    `;
+        const res = await response.json();
+        
+        if (res.erro) {
+            alert(res.erro);
+            return;
+        }
 
-    init3D(dados.largura, dados.altura, dados.profundidade, logoUrl);
+        document.getElementById('resultado').innerHTML = `
+            <div style="background:#e0e7ff; padding:15px; border-radius:12px; margin-bottom:15px;">
+                <strong>Preço Estimado: ${res.precoEstimado}</strong><br>
+                <small>Volume: ${res.volumeCalculado}</small>
+            </div>
+        `;
+
+        init3D(dados.largura, dados.altura, dados.profundidade, logoUrl);
+    } catch (error) {
+        alert("Erro de conexão com o servidor.");
+    }
 }
 
-// 5. RESPONSIVIDADE CORRIGIDA (Redimensiona baseado no novo container estrito)
 window.addEventListener('resize', () => {
     if (camera && renderer) {
         const container = document.getElementById('canvas-3d');
