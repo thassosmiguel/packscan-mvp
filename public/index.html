@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PackScan Pro</title>
+    <title>PackScan Pro | MVP</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -17,24 +17,26 @@
                 <div class="camera-preview">
                     <video id="webcam" autoplay playsinline></video>
                     <div id="scan-line" class="scan-line" style="display: none;"></div>
-                    <div id="camera-overlay" style="position: absolute; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6);">
-                        <button onclick="iniciarScan()" style="width: auto; padding: 12px 24px;">Ativar Scanner</button>
+                    <div id="camera-overlay">
+                        <button onclick="iniciarScan()">Ativar Scanner</button>
                     </div>
                 </div>
+                <button id="btn-parar" onclick="pararScan()" class="btn-stop" style="display: none;">Encerrar Scanner</button>
 
-                <div class="input-group" style="margin-top: 20px;">
-                    <div style="display: flex; gap: 5px;">
-                        <input type="number" id="largura" placeholder="L">
-                        <input type="number" id="altura" placeholder="A">
-                        <input type="number" id="profundidade" placeholder="P">
+                <div class="input-group">
+                    <div class="dimensions">
+                        <input type="number" id="largura" placeholder="Largura">
+                        <input type="number" id="altura" placeholder="Altura">
+                        <input type="number" id="profundidade" placeholder="Prof">
                     </div>
                     <select id="material">
-                        <option value="papelão">Papelão</option>
-                        <option value="kraft">Kraft</option>
-                        <option value="premium">Premium</option>
+                        <option value="papelão">Papelão Corrugado</option>
+                        <option value="kraft">Papel Kraft</option>
+                        <option value="premium">Premium Branco</option>
                     </select>
+                    <label>Logo da Marca:</label>
                     <input type="file" id="logoInput" accept="image/*">
-                    <button onclick="calcularEGerar()">Simular e Calcular</button>
+                    <button class="btn-main" onclick="calcularEGerar()">Simular Orçamento</button>
                 </div>
             </div>
 
