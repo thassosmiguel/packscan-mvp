@@ -1,5 +1,6 @@
 let scene, camera, renderer, box, controls, streamGlobal;
 
+// 1. GATILHO DA CÂMERA
 async function iniciarScan() {
     const video = document.getElementById('webcam');
     const line = document.getElementById('scan-line');
@@ -17,6 +18,7 @@ async function iniciarScan() {
     }
 }
 
+// 2. PARAR CÂMERA
 function pararScan() {
     if (streamGlobal) {
         streamGlobal.getTracks().forEach(track => track.stop());
@@ -27,6 +29,7 @@ function pararScan() {
     }
 }
 
+// 3. FUNÇÃO 3D (COM AJUSTE DE CONTAINER)
 function init3D(l, a, p, logoUrl) {
     const container = document.getElementById('canvas-3d');
     container.innerHTML = '';
@@ -34,9 +37,13 @@ function init3D(l, a, p, logoUrl) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf1f5f9);
 
-    camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    // Usa explicitamente a altura e largura do CSS
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -64,6 +71,7 @@ function init3D(l, a, p, logoUrl) {
     animate();
 }
 
+// 4. LÓGICA DE NEGÓCIO
 async function calcularEGerar() {
     const file = document.getElementById('logoInput').files[0];
     const logoUrl = file ? URL.createObjectURL(file) : null;
@@ -92,11 +100,15 @@ async function calcularEGerar() {
     init3D(dados.largura, dados.altura, dados.profundidade, logoUrl);
 }
 
+// 5. RESPONSIVIDADE CORRIGIDA (Redimensiona baseado no novo container estrito)
 window.addEventListener('resize', () => {
     if (camera && renderer) {
         const container = document.getElementById('canvas-3d');
-        camera.aspect = container.clientWidth / container.clientHeight;
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        
+        camera.aspect = width / height;
         camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setSize(width, height);
     }
 });

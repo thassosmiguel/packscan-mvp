@@ -1,28 +1,115 @@
-@charset "UTF-8;"
-
+@charset "UTF-8";
 :root { --primary: #6366f1; --dark: #1e293b; --light: #f8fafc; }
-* { box-sizing: border-box; }
-body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding: 15px; display: flex; justify-content: center; }
+* { box-sizing: border-box; margin: 0; padding: 0;}
 
-.container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 1000px; }
-h1 { text-align: center; color: var(--dark); margin-bottom: 25px; }
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: var(--light); 
+    display: flex; 
+    justify-content: center;
+    padding: 10px; /* Reduzido para mobile */
+}
 
-.main-layout { display: flex; flex-direction: column; gap: 25px; }
+.container { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    width: 100%; 
+    max-width: 900px; 
+    margin-top: 10px;
+}
 
-@media (min-width: 768px) { .main-layout { flex-direction: row; } .col-left, .col-right { flex: 1; } }
+h1 { text-align: center; color: var(--dark); margin-bottom: 20px; font-size: 1.5rem; }
 
-.camera-preview { width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 15px; position: relative; overflow: hidden; }
+.main-layout { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+/* O Segredo do Responsivo: Ajustar para telas maiores (PCs) */
+@media (min-width: 768px) { 
+    .main-layout { 
+        flex-direction: row; 
+        align-items: stretch; /* Estica as colunas por igual */
+    } 
+    .col-left, .col-right { 
+        flex: 1; 
+        display: flex;
+        flex-direction: column;
+    } 
+}
+
+.camera-preview { 
+    width: 100%; 
+    aspect-ratio: 16/9; /* Proporção melhor de tela cheia/landscape */
+    background: #000; 
+    border-radius: 10px; 
+    position: relative; 
+    overflow: hidden; 
+}
+
 video { width: 100%; height: 100%; object-fit: cover; }
 
-.scan-line { position: absolute; width: 100%; height: 3px; background: var(--primary); top: 0; animation: scan 2s infinite linear; box-shadow: 0 0 10px var(--primary); }
+.scan-line { 
+    position: absolute; 
+    width: 100%; 
+    height: 3px; 
+    background: var(--primary); 
+    top: 0; 
+    animation: scan 2.5s infinite linear; 
+    box-shadow: 0 0 12px var(--primary); 
+}
 @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-#camera-overlay { position: absolute; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); }
+#camera-overlay { 
+    position: absolute; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: rgba(0,0,0,0.7); 
+}
 
-.input-group { margin-top: 20px; display: grid; gap: 12px; }
-.dimensions { display: flex; gap: 8px; }
-input, select, .btn-main { padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 16px; width: 100%; }
-.btn-main { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-.btn-stop { background: #ff4757; color: white; border: none; padding: 10px; width: 100%; border-radius: 10px; margin-top: 10px; cursor: pointer; }
+.input-group { margin-top: 15px; display: grid; gap: 10px; }
 
-#canvas-3d { width: 100%; height: 400px; background: #f1f5f9; border-radius: 15px; margin-top: 15px; }
+.dimensions { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; /* Quebra as caixinhas uniformemente */
+    gap: 8px; 
+}
+
+input, select, button { 
+    padding: 12px; 
+    border-radius: 8px; 
+    border: 1px solid #cbd5e1; 
+    font-size: 15px; 
+    width: 100%; 
+}
+
+.btn-main { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.2s;}
+.btn-main:hover { background: #4f46e5; }
+.btn-stop { background: #ef4444; color: white; border: none; font-weight: bold; margin-top: 10px; cursor: pointer;}
+
+/* O grande ajuste no 3D - Altura fixa garantida no Wrapper */
+#canvas-wrapper {
+    width: 100%;
+    height: 350px; /* Altura exata para o mobile/desktop não desconfigurar */
+    margin-top: 15px;
+}
+
+#canvas-3d { 
+    width: 100%; 
+    height: 100%; 
+    background: #f1f5f9; 
+    border-radius: 10px; 
+    overflow: hidden; /* Evita vazamento */
+}
+
+/* Ajustes no resultado visual para não ocupar espaço demais no mobile */
+#resultado div {
+    font-size: 0.9rem;
+}

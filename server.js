@@ -13,7 +13,7 @@ app.post('/orcamento', (req, res) => {
     }
 
     const volume = largura * altura * profundidade;
-    const volumeFinal = volume * 1.1; // Margem de 10%
+    const volumeFinal = volume * 1.1;
 
     let precoPorCm3;
     switch (material.toLowerCase()) {

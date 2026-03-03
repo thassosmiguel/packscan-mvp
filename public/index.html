@@ -25,24 +25,28 @@
 
                 <div class="input-group">
                     <div class="dimensions">
-                        <input type="number" id="largura" placeholder="Largura">
-                        <input type="number" id="altura" placeholder="Altura">
-                        <input type="number" id="profundidade" placeholder="Prof">
+                        <input type="number" id="largura" placeholder="Larg.">
+                        <input type="number" id="altura" placeholder="Alt.">
+                        <input type="number" id="profundidade" placeholder="Prof.">
                     </div>
                     <select id="material">
                         <option value="papelão">Papelão Corrugado</option>
                         <option value="kraft">Papel Kraft</option>
                         <option value="premium">Premium Branco</option>
                     </select>
-                    <label>Logo da Marca:</label>
+                    
+                    <label>Logo da Marca (Opcional):</label>
                     <input type="file" id="logoInput" accept="image/*">
+                    
                     <button class="btn-main" onclick="calcularEGerar()">Simular Orçamento</button>
                 </div>
             </div>
 
             <div class="col-right">
                 <div id="resultado"></div>
-                <div id="canvas-3d"></div>
+                <div id="canvas-wrapper">
+                    <div id="canvas-3d"></div>
+                </div>
             </div>
         </div>
     </div>
